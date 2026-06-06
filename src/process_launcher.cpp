@@ -1,5 +1,5 @@
 #include "process_launcher.h"
-
+#include "fs_isolator.h"
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -8,6 +8,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <cstring>
+
 
 // Reads everything from a file descriptor until it's closed.
 static std::string read_all(int fd) {
@@ -39,6 +40,8 @@ ProcessResult ProcessLauncher::run(const std::vector<std::string>& args) {
     if (pipe(stdout_pipe) == -1 || pipe(stderr_pipe) == -1)
         throw std::runtime_error(std::string("pipe() failed: ") + strerror(errno));
 
+    FSIsolator isolator;          // construct it
+    isolator.setup_rootfs();      // call on the object
     pid_t pid = fork();
 
     if (pid == -1)
@@ -58,6 +61,8 @@ ProcessResult ProcessLauncher::run(const std::vector<std::string>& args) {
 
         close(stdout_pipe[1]);
         close(stderr_pipe[1]);
+
+        isolator.enter_jail()
 
         // Build a null-terminated argv array that execvp expects.
         std::vector<char*> argv;

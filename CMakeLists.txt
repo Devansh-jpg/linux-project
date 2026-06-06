@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(sandbox
     src/main.cpp
     src/process_launcher.cpp
+    src/fs_isolator.cpp
 )
 
 target_include_directories(sandbox PRIVATE include)
