@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/sandbox.dir/link.d CMakeFiles/sandbox.dir/src/main.cpp.o CMakeFiles/sandbox.dir/src/process_launcher.cpp.o -o sandbox  -lpthread

@@ -62,7 +62,7 @@ ProcessResult ProcessLauncher::run(const std::vector<std::string>& args) {
         close(stdout_pipe[1]);
         close(stderr_pipe[1]);
 
-        isolator.enter_jail()
+        isolator.enter_jail();
 
         // Build a null-terminated argv array that execvp expects.
         std::vector<char*> argv;
@@ -72,6 +72,7 @@ ProcessResult ProcessLauncher::run(const std::vector<std::string>& args) {
 
         // Replace this child process image with the requested command.
         execvp(argv[0], argv.data());
+        perror("execvp failed");
 
         // execvp only returns on failure.
         _exit(127);

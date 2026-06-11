@@ -1,14 +1,25 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 
 class FSIsolator{
     private:
-    std::string root_path = "/tmp/sandbox-root";
+    std::string root_path_ = "/tmp/sandbox-root";
+
+    // Copy one host file into the jail at the SAME path, creating parent dirs.
+    //   host_path = "/bin/sh"  ->  writes "/tmp/sandbox-root/bin/sh"
+    void copy_into_jail(const std::string& host_path);
+
+    // Return absolute paths of all .so dependencies of `binary` (parses ldd).
+    std::vector<std::string> shared_libs(const std::string& binary);
+
     public:
-    
-    void setup_rootfs();
+
+    // Build a working fake root: copy each binary + its libraries in.
+    void setup_rootfs(const std::vector<std::string>& binaries =
+                          {"/bin/sh", "/bin/ls", "/bin/cat", "/bin/echo"});
     void enter_jail();
-    FSIsolator(const std::string& root_path= "/tmp/sandbox-root");
+    explicit FSIsolator(const std::string& root_path = "/tmp/sandbox-root");
 };

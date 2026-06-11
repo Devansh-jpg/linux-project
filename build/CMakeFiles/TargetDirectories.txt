@@ -1,3 +1,0 @@
-/mnt/c/Users/DEVANSH/linux-project/build/CMakeFiles/sandbox.dir
-/mnt/c/Users/DEVANSH/linux-project/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/DEVANSH/linux-project/build/CMakeFiles/rebuild_cache.dir

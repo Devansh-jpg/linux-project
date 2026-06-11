@@ -13,6 +13,9 @@ int main(int argc, char* argv[]) {
 
     ProcessLauncher launcher;
     ProcessResult result = launcher.run(args);
+    std::cout << "STDOUT: [" << result.stdout_output << "]\n";
+    std::cout << "STDERR: [" << result.stderr_output << "]\n";
+    std::cout << "EXIT: " << result.exit_code << "\n";
 
     if (!result.stdout_output.empty())
         std::cout << result.stdout_output;
@@ -22,3 +25,5 @@ int main(int argc, char* argv[]) {
 
     return result.exit_code;
 }
+
+
