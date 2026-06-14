@@ -5,7 +5,7 @@
 ## High-Level Design (HLD)
 
 ```
-User types:   ./sandbox ls -la
+User types:   ./ForkCage ls -la
 
 main.cpp            process_launcher.cpp              Linux kernel
 ─────────           ────────────────────              ────────────
@@ -155,7 +155,7 @@ execvp(argv[0], argv.data());
 _exit(127);
 ```
 
-`execvp` replaces the current process image with the command to run. The child stops being "a copy of the sandbox program" and becomes `ls` (or whatever). The pipes survive because `execvp` preserves open file descriptors.
+`execvp` replaces the current process image with the command to run. The child stops being "a copy of the ForkCage program" and becomes `ls` (or whatever). The pipes survive because `execvp` preserves open file descriptors.
 
 `_exit(127)` only runs if `execvp` fails. We use `_exit` not `exit` because `exit()` flushes C++ destructors and atexit handlers inherited from the parent — things the parent, not the child, should clean up.
 
@@ -205,9 +205,9 @@ int exit_code = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
 std::vector<std::string> args(argv + 1, argv + argc);
 ```
 
-Converts the C-style `argv` array into a `std::vector<std::string>`, skipping `argv[0]` (which is `"sandbox"` itself). So `./sandbox ls -la` gives `["ls", "-la"]`.
+Converts the C-style `argv` array into a `std::vector<std::string>`, skipping `argv[0]` (which is `"ForkCage"` itself). So `./ForkCage ls -la` gives `["ls", "-la"]`.
 
-Then runs `launcher.run(args)`, prints stdout/stderr, and returns the child's exit code — so the sandbox is transparent to any shell script wrapping it.
+Then runs `launcher.run(args)`, prints stdout/stderr, and returns the child's exit code — so ForkCage is transparent to any shell script wrapping it.
 
 ---
 
@@ -226,7 +226,7 @@ Then runs `launcher.run(args)`, prints stdout/stderr, and returns the child's ex
 
 ---
 
-## Full Execution Flow for `./sandbox ls`
+## Full Execution Flow for `./ForkCage ls`
 
 ```
 1. main.cpp:       args = ["ls"]

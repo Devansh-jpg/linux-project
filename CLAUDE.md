@@ -1,4 +1,4 @@
-# Sandbox — C++ Container Runtime
+# ForkCage — C++ Container Runtime
 
 ## What This Project Is
 
@@ -62,14 +62,14 @@ A lightweight Linux sandbox runtime that lets you run any command in complete is
 
 **Steps to implement:**
 1. `unshare(CLONE_NEWNS)` — give process its own mount namespace
-2. Set up an overlayfs or minimal rootfs at `/tmp/sandbox-root`
-3. `chroot("/tmp/sandbox-root")` — jail the process inside fake root
+2. Set up an overlayfs or minimal rootfs at `/tmp/ForkCage-root`
+3. `chroot("/tmp/ForkCage-root")` — jail the process inside fake root
 4. `chdir("/")` — reset working dir inside jail
 
 **Setup needed:**
 ```bash
-mkdir -p /tmp/sandbox-root/{bin,lib,lib64}
-cp /bin/bash /tmp/sandbox-root/bin/
+mkdir -p /tmp/ForkCage-root/{bin,lib,lib64}
+cp /bin/bash /tmp/ForkCage-root/bin/
 # copy shared libs shown by: ldd /bin/bash
 ```
 
@@ -94,9 +94,9 @@ cp /bin/bash /tmp/sandbox-root/bin/
 
 **cgroups work by writing to files:**
 ```bash
-mkdir /sys/fs/cgroup/my-sandbox
-echo "512M" > /sys/fs/cgroup/my-sandbox/memory.max
-echo $PID   > /sys/fs/cgroup/my-sandbox/cgroup.procs
+mkdir /sys/fs/cgroup/ForkCage
+echo "512M" > /sys/fs/cgroup/ForkCage/memory.max
+echo $PID   > /sys/fs/cgroup/ForkCage/cgroup.procs
 ```
 
 **Study before coding:**
@@ -145,9 +145,9 @@ cd /mnt/c/Users/DEVANSH/linux-project
 mkdir build && cd build
 cmake ..
 make
-./sandbox ls
-./sandbox whoami
-./sandbox bash -c "echo hello"
+./ForkCage ls
+./ForkCage whoami
+./ForkCage bash -c "echo hello"
 ```
 
 **WSL2 apt fix (if apt hangs at 0%):**
@@ -161,14 +161,14 @@ sudo apt update
 ## LLD — Class Design
 
 ```
-Sandbox (orchestrator)
+ForkCage (orchestrator)
   ├── ProcessLauncher    → fork/exec/pipe         (M1 ✅)
   ├── FSIsolator         → mount ns + chroot       (M2)
   ├── ProcessIsolator    → pid/user ns + cgroups   (M3)
   └── SnapshotManager   → COW fork + CRIU          (M4)
 ```
 
-Each class owns one responsibility. Build and test independently. Later refactor to a `SandboxBuilder` fluent API.
+Each class owns one responsibility. Build and test independently. Later refactor to a `ForkCageBuilder` fluent API.
 
 ---
 

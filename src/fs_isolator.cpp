@@ -53,7 +53,7 @@ void FSIsolator::copy_into_jail(const std::string& host_path) {
     if (!fs::exists(host_path))
         return;  // binary/lib not present on this host; skip silently
 
-    fs::path dest = root_path_ + host_path;   // "/tmp/sandbox-root" + "/bin/sh"
+    fs::path dest = root_path_ + host_path;   // "/tmp/ForkCage-root" + "/bin/sh"
     std::error_code ec;
     fs::create_directories(dest.parent_path(), ec);
     if (ec)

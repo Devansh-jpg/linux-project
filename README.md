@@ -1,6 +1,10 @@
-# Sandbox — C++ Container Runtime
+# ForkCage — C++ Container Runtime
 
 Inspired by Indexable (YC) — sandbox infrastructure for AI agents.
+
+**ForkCage** runs any command inside a cage: its own process tree, its own
+filesystem root, and (soon) its own resource limits — built from scratch on raw
+Linux syscalls, the same primitives Docker and `runc` sit on.
 
 ---
 
@@ -42,9 +46,9 @@ cd /mnt/c/Users/DEVANSH/linux-project
 mkdir build && cd build
 cmake ..
 make
-./sandbox ls -la
-./sandbox python3 --version
-./sandbox bash -c "echo hello"
+./ForkCage ls -la
+./ForkCage python3 --version
+./ForkCage bash -c "echo hello"
 ```
 
 ---
@@ -59,7 +63,7 @@ The child process should only see a fake root filesystem, not your real `/home`,
 
 ### What to write
 1. Call `unshare(CLONE_NEWNS)` — gives the process its own mount namespace
-2. Call `chroot("/tmp/sandbox-root")` — jail the process inside a fake root
+2. Call `chroot("/tmp/ForkCage-root")` — jail the process inside a fake root
 3. Call `chdir("/")` — reset working directory inside the jail
 
 ### New syscalls to learn before coding
@@ -70,9 +74,9 @@ The child process should only see a fake root filesystem, not your real `/home`,
 ### Setup needed before running
 ```bash
 # Create a minimal fake root filesystem to chroot into
-mkdir -p /tmp/sandbox-root/{bin,lib,lib64}
-cp /bin/bash /tmp/sandbox-root/bin/
-cp /bin/ls   /tmp/sandbox-root/bin/
+mkdir -p /tmp/ForkCage-root/{bin,lib,lib64}
+cp /bin/bash /tmp/ForkCage-root/bin/
+cp /bin/ls   /tmp/ForkCage-root/bin/
 # copy required shared libs (ldd /bin/bash will show you which)
 ```
 

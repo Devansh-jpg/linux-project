@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cerr << "Usage: sandbox <command> [args...]\n";
+        std::cerr << "Usage: ForkCage <command> [args...]\n";
         return 1;
     }
 
